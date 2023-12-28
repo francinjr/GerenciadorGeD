@@ -1,5 +1,6 @@
 package com.francinjr.xpenses.domain.model;
 
+import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -11,53 +12,78 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "ganhos")
 public class Ganho {
-	
+
 	// ,length = 255
 	@Column(nullable = false)
 	private String nome;
-	
+
 	@Column(nullable = false)
 	private Double valor;
-	
+
 	private String descricao;
-	
+
+	private LocalDateTime dataInicio;
+	private LocalDateTime dataFim;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
-	
+
 	public Ganho(String nome, Double valor, String descricao, Long id) {
 		setNome(nome);
 		setValor(valor);
 		setDescricao(descricao);
 		setId(id);
 	}
-	
-	public Ganho() {}
-	
+
+	public Ganho() {
+	}
+
 	public String getNome() {
 		return nome;
 	}
-	
+
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
+
 	public Double getValor() {
 		return valor;
 	}
+
 	public void setValor(Double valor) {
 		this.valor = valor;
 	}
+
 	public String getDescricao() {
 		return descricao;
 	}
+
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
 	}
+
 	public Long getId() {
 		return id;
 	}
+
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public LocalDateTime getDataInicio() {
+		return dataInicio;
+	}
+
+	public void setDataInicio(LocalDateTime dataInicio) {
+		this.dataInicio = dataInicio;
+	}
+
+	public LocalDateTime getDataFim() {
+		return dataFim;
+	}
+
+	public void setDataFim(LocalDateTime dataFim) {
+		this.dataFim = dataFim;
 	}
 }

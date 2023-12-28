@@ -9,7 +9,6 @@ public class GanhoNaoEncontradoException extends RuntimeException {
 	}
 	
 	public GanhoNaoEncontradoException(Long ganhoId) {
-		this(String.format("Não existe um cadastro de ganho com código %d", ganhoId));
+		this(String.format("Não existe um ganho com código %d", ganhoId));
 	}
-	
 }

@@ -1,4 +1,4 @@
-package com.francinjr.xpenses.api.controller;
+package com.francinjr.xpenses.controller;
 
 import java.util.List;
 import java.util.Optional;
@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.francinjr.xpenses.domain.model.Ganho;
 import com.francinjr.xpenses.domain.repository.GanhoRepository;
-import com.francinjr.xpenses.domain.service.SalvarGanhoService;
+import com.francinjr.xpenses.domain.service.GanhoService;
 
 @RestController
 @RequestMapping(value = "/ganhos", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -30,26 +30,26 @@ public class GanhoController {
 	GanhoRepository ganhoRepository;
 	
 	@Autowired
-	SalvarGanhoService cadastroGanho;
+	GanhoService ganhoService;
+	
 	
 	@GetMapping
-	public List<Ganho> listar() {
-		List<Ganho> todosGanhos = ganhoRepository.findAll();
-		return todosGanhos;
+	public ResponseEntity<List<Ganho>> listar() {
+		List<Ganho> todosGanhos = ganhoService.buscarTodos();
+		return new ResponseEntity<List<Ganho>>(todosGanhos, HttpStatus.OK);
 	}
 	
 	@GetMapping("/{ganhoId}")
-	public Ganho buscar(@PathVariable Long ganhoId) {
-		//Ganho ganho = cadastroGanho.buscarOuFalhar(ganhoId);
-		//return ganho;
-		return cadastroGanho.buscarOuFalhar(ganhoId);
+	public ResponseEntity<Ganho> buscar(@PathVariable Long ganhoId) {
+		Ganho ganho = ganhoService.buscarOuFalhar(ganhoId);
+		return new ResponseEntity<Ganho>(ganho, HttpStatus.OK);
 	}
 	
-	@PostMapping
-	@ResponseStatus(HttpStatus.CREATED)
-	public Ganho adicionar(@RequestBody Ganho ganho) {
-		return cadastroGanho.salvar(ganho);
-	}
+    @PostMapping
+    public ResponseEntity<Ganho> adicionar(@RequestBody Ganho ganho) {
+        Ganho novoGanho = ganhoService.salvar(ganho);
+        return new ResponseEntity<Ganho>(novoGanho, HttpStatus.CREATED);
+    }
 	
 	@PutMapping("/{ganhoId}")
 	public ResponseEntity<Ganho> atualizar(@PathVariable Long ganhoId,
@@ -57,7 +57,7 @@ public class GanhoController {
 		Optional<Ganho> ganhoAtual = ganhoRepository.findById(ganhoId);
 		if(ganhoAtual.isPresent()) {
 			BeanUtils.copyProperties(ganho, ganhoAtual.get(), "id");
-			Ganho ganhoSalvo = cadastroGanho.salvar(ganhoAtual.get());
+			Ganho ganhoSalvo = ganhoService.salvar(ganhoAtual.get());
 			return ResponseEntity.ok(ganhoSalvo);
 		}
 		return ResponseEntity.notFound().build();
@@ -66,6 +66,6 @@ public class GanhoController {
 	@DeleteMapping("/{ganhoId}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void deletar(@PathVariable Long ganhoId) {
-		cadastroGanho.excluir(ganhoId);
+		ganhoService.excluir(ganhoId);
 	}
 }
