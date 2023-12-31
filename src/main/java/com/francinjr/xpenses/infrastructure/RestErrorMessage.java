@@ -4,11 +4,11 @@ import org.springframework.http.HttpStatus;
 
 public class RestErrorMessage {
 	private HttpStatus status;
-	private String mensagem;
+	private String message;
 	
-	public RestErrorMessage(HttpStatus status, String mensagem) {
+	public RestErrorMessage(HttpStatus status, String message) {
 		setStatus(status);
-		setMensagem(mensagem);
+		setMessage(message);
 	}
 
 	public HttpStatus getStatus() {
@@ -19,12 +19,12 @@ public class RestErrorMessage {
 		this.status = status;
 	}
 
-	public String getMensagem() {
-		return mensagem;
+	public String getMessage() {
+		return message;
 	}
 
-	public void setMensagem(String menssagem) {
-		this.mensagem = menssagem;
+	public void setMessage(String message) {
+		this.message = message;
 	}
 	
 	

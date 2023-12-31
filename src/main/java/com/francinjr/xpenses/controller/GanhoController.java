@@ -1,9 +1,7 @@
 package com.francinjr.xpenses.controller;
 
 import java.util.List;
-import java.util.Optional;
 
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -15,57 +13,60 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.francinjr.xpenses.domain.model.Ganho;
-import com.francinjr.xpenses.domain.repository.GanhoRepository;
 import com.francinjr.xpenses.domain.service.GanhoService;
+import com.francinjr.xpenses.dto.GanhoDTO;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping(value = "/ganhos", produces = MediaType.APPLICATION_JSON_VALUE)
 public class GanhoController {
 	
 	@Autowired
-	GanhoRepository ganhoRepository;
-	
-	@Autowired
 	GanhoService ganhoService;
 	
 	
 	@GetMapping
-	public ResponseEntity<List<Ganho>> listar() {
-		List<Ganho> todosGanhos = ganhoService.buscarTodos();
-		return new ResponseEntity<List<Ganho>>(todosGanhos, HttpStatus.OK);
+	public ResponseEntity<List<GanhoDTO>> listar() {
+		List<GanhoDTO> todosGanhos = ganhoService.buscarTodos();
+		return new ResponseEntity<List<GanhoDTO>>(todosGanhos, HttpStatus.OK);
 	}
+	
 	
 	@GetMapping("/{ganhoId}")
-	public ResponseEntity<Ganho> buscar(@PathVariable Long ganhoId) {
-		Ganho ganho = ganhoService.buscarOuFalhar(ganhoId);
-		return new ResponseEntity<Ganho>(ganho, HttpStatus.OK);
+	public ResponseEntity<GanhoDTO> buscar(@PathVariable Long ganhoId) {
+		GanhoDTO ganhoDTO = ganhoService.buscarOuFalhar(ganhoId);
+		return new ResponseEntity<GanhoDTO>(ganhoDTO, HttpStatus.OK);
 	}
 	
+	
     @PostMapping
-    public ResponseEntity<Ganho> adicionar(@RequestBody Ganho ganho) {
-        Ganho novoGanho = ganhoService.salvar(ganho);
-        return new ResponseEntity<Ganho>(novoGanho, HttpStatus.CREATED);
+    public ResponseEntity<GanhoDTO> adicionar(@Valid @RequestBody GanhoDTO ganhoDTO)
+    		throws Exception {
+        GanhoDTO ganhoSalvo = ganhoService.criar(ganhoDTO);
+        return new ResponseEntity<GanhoDTO>(ganhoSalvo, HttpStatus.CREATED);
     }
 	
+    
 	@PutMapping("/{ganhoId}")
-	public ResponseEntity<Ganho> atualizar(@PathVariable Long ganhoId,
-			@RequestBody Ganho ganho) {
-		Optional<Ganho> ganhoAtual = ganhoRepository.findById(ganhoId);
-		if(ganhoAtual.isPresent()) {
-			BeanUtils.copyProperties(ganho, ganhoAtual.get(), "id");
-			Ganho ganhoSalvo = ganhoService.salvar(ganhoAtual.get());
-			return ResponseEntity.ok(ganhoSalvo);
-		}
-		return ResponseEntity.notFound().build();
+	public ResponseEntity<GanhoDTO> atualizar(@PathVariable Long ganhoId,
+			@Valid @RequestBody GanhoDTO ganhoDTO) throws Exception {
+		
+		Ganho ganho = new Ganho(ganhoDTO);
+		ganho.setId(ganhoId);
+		
+		GanhoDTO ganhoDTO2 = new GanhoDTO(ganho);
+		
+		GanhoDTO ganhoSalvo = ganhoService.atualizar(ganhoDTO2);
+		return new ResponseEntity<GanhoDTO>(ganhoSalvo, HttpStatus.OK);
 	}
 	
 	@DeleteMapping("/{ganhoId}")
-	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void deletar(@PathVariable Long ganhoId) {
+	public ResponseEntity<Void> deletar(@PathVariable Long ganhoId) {
 		ganhoService.excluir(ganhoId);
+		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
 }

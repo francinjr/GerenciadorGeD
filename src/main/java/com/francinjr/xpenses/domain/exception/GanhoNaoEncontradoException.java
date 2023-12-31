@@ -4,8 +4,8 @@ public class GanhoNaoEncontradoException extends RuntimeException {
 
 	private static final long serialVersionUID = 1L;
 
-	public GanhoNaoEncontradoException(String mensagem) {
-		super(mensagem);
+	public GanhoNaoEncontradoException(String message) {
+		super(message);
 	}
 	
 	public GanhoNaoEncontradoException(Long ganhoId) {

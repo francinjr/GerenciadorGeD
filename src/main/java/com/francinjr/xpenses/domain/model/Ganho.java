@@ -2,7 +2,8 @@ package com.francinjr.xpenses.domain.model;
 
 import java.time.LocalDateTime;
 
-import jakarta.persistence.Column;
+import com.francinjr.xpenses.dto.GanhoDTO;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -13,11 +14,8 @@ import jakarta.persistence.Table;
 @Table(name = "ganhos")
 public class Ganho {
 
-	// ,length = 255
-	@Column(nullable = false)
 	private String nome;
 
-	@Column(nullable = false)
 	private Double valor;
 
 	private String descricao;
@@ -37,6 +35,13 @@ public class Ganho {
 	}
 
 	public Ganho() {
+	}
+	
+	public Ganho(GanhoDTO data) {
+		setNome(data.nome());
+		setValor(data.valor());
+		setDescricao(data.descricao());
+		setId(data.id());
 	}
 
 	public String getNome() {
