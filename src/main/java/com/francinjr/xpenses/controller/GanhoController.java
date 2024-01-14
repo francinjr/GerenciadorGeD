@@ -64,8 +64,9 @@ public class GanhoController {
 		return new ResponseEntity<GanhoDTO>(ganhoSalvo, HttpStatus.OK);
 	}
 	
+	
 	@DeleteMapping("/{ganhoId}")
-	public ResponseEntity<Void> deletar(@PathVariable Long ganhoId) {
+	public ResponseEntity<Void> deletar(@PathVariable Long ganhoId) throws Exception {
 		ganhoService.excluir(ganhoId);
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}

@@ -1,7 +1,6 @@
 package com.francinjr.xpenses.domain.exception;
 
 public class GanhoNaoEncontradoException extends RuntimeException {
-
 	private static final long serialVersionUID = 1L;
 
 	public GanhoNaoEncontradoException(String message) {
