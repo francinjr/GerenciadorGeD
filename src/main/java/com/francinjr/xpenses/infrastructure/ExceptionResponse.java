@@ -3,7 +3,6 @@ package com.francinjr.xpenses.infrastructure;
 import java.util.List;
 
 public class ExceptionResponse {
-	//private HttpStatus status;
 	private Integer status;
 	private String type;
 	private String title;
