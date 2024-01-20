@@ -7,7 +7,7 @@ public class FinanceNotFoundException extends RuntimeException {
 		super(message);
 	}
 	
-	public FinanceNotFoundException(Long financeId) {
-		this(String.format("Não existe uma finança com código %d", financeId));
+	public FinanceNotFoundException(String message, Long financeId) {
+		this(String.format(message + "porque não existe uma finança com código %d", financeId));
 	}
 }

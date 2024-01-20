@@ -1,15 +1,20 @@
 package com.francinjr.xpenses.domain.service;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.francinjr.xpenses.controller.FinanceController;
 import com.francinjr.xpenses.domain.exception.FinanceNotFoundException;
 import com.francinjr.xpenses.domain.model.Finance;
 import com.francinjr.xpenses.domain.repository.FinanceRepository;
 import com.francinjr.xpenses.dto.FinanceDTO;
+import com.francinjr.xpenses.mapper.Mapper;
 
 @Service
 public class FinanceService {
@@ -18,69 +23,51 @@ public class FinanceService {
 	private FinanceRepository financeRepository;
 
 	public List<FinanceDTO> findAll() {
-		List<Finance> finances = financeRepository.findAll();
+		List<FinanceDTO> finances = Mapper.parseListObjects(financeRepository.findAll(), FinanceDTO.class);
 
-		return finances.stream().map(finance -> new FinanceDTO(finance)).toList();
+		finances.stream()
+				.forEach(finance -> finance
+						.add(linkTo(methodOn(FinanceController.class).findById(finance.getKey())).withSelfRel()));
+		return finances;
 	}
-	
-	
+
 	public FinanceDTO findById(Long financeId) {
-		Finance finance = financeRepository.findById(financeId)
-				.orElseThrow(() -> new FinanceNotFoundException(financeId));
-		
-		FinanceDTO financeDTO = new FinanceDTO(finance);
+		Finance entity = financeRepository.findById(financeId)
+				.orElseThrow(() -> new FinanceNotFoundException("Finança não encontrada, ", financeId));
+
+		FinanceDTO financeDTO = Mapper.parseObject(entity, FinanceDTO.class);
+
+		financeDTO.add(linkTo(methodOn(FinanceController.class).findById(financeId)).withSelfRel());
 		return financeDTO;
 	}
-	
-	
+
 	@Transactional
-	public FinanceDTO create(FinanceDTO financeDTO) throws Exception {
-		Finance finance = new Finance(financeDTO);
-		
-		try {
-			Finance createdFinance = financeRepository.save(finance);
-			
-			FinanceDTO createdFinanceDTO = new FinanceDTO(createdFinance);
-			return createdFinanceDTO;
-		} catch(Exception exception) {
-			throw new Exception(exception.getMessage());
-		}
-	}
-	
-	
-	@Transactional
-	public FinanceDTO update(FinanceDTO financeDTO) throws Exception {
-		FinanceDTO foundFinanceDTO = findById(financeDTO.id());
-		
-		if(foundFinanceDTO != null) {
-			Finance finance = new Finance(financeDTO);
-			
-			try {
-				finance = financeRepository.save(finance);
-			} catch(Exception exception) {
-				throw new Exception(exception.getMessage());
-			}
-			
-			FinanceDTO updatedFinance = new FinanceDTO(finance);
-			return updatedFinance;
-		} else {
-			throw new FinanceNotFoundException(financeDTO.id());
-		}
+	public FinanceDTO create(FinanceDTO finance) {
+		Finance entity = Mapper.parseObject(finance, Finance.class);
+
+		FinanceDTO dto = Mapper.parseObject(financeRepository.save(entity), FinanceDTO.class);
+		dto.add(linkTo(methodOn(FinanceController.class).findById(dto.getKey())).withSelfRel());
+		return dto;
 	}
 
-	
 	@Transactional
-	public void delete(Long financeId) throws Exception {
-		FinanceDTO foundFinanceDTO = findById(financeId);
-		
-		if(foundFinanceDTO != null) {
-			try {
-				financeRepository.deleteById(financeId);
-			} catch(Exception exception) {
-				new Exception(exception.getMessage());
-			}
-		} else {
-			throw new FinanceNotFoundException(financeId);
-		}
+	public FinanceDTO update(FinanceDTO finance) {
+
+		Finance entity = financeRepository.findById(finance.getKey())
+				.orElseThrow(() -> new FinanceNotFoundException("Não foi possível atualizar, ", finance.getKey()));
+
+		entity = Mapper.parseObject(finance, Finance.class);
+
+		FinanceDTO dto = Mapper.parseObject(financeRepository.save(entity), FinanceDTO.class);
+		dto.add(linkTo(methodOn(FinanceController.class).findById(dto.getKey())).withSelfRel());
+		return dto;
+	}
+
+	@Transactional
+	public void delete(Long financeId) {
+		Finance entity = financeRepository.findById(financeId)
+				.orElseThrow(() -> new FinanceNotFoundException("Não foi possível deletar, ", financeId));
+
+		financeRepository.delete(entity);
 	}
 }
