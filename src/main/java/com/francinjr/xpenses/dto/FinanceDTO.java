@@ -2,6 +2,7 @@ package com.francinjr.xpenses.dto;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 import org.springframework.hateoas.RepresentationModel;
 
@@ -27,7 +28,7 @@ public class FinanceDTO extends RepresentationModel<FinanceDTO> implements Seria
 	
 	private String description;
 	private FinanceType type;
-	private LocalDateTime paiday;
+	//private LocalDateTime paiday;
 	
 
 	public FinanceDTO(String name, Double value, String description, FinanceType type, LocalDateTime paiday, Long key) {
@@ -35,7 +36,7 @@ public class FinanceDTO extends RepresentationModel<FinanceDTO> implements Seria
 		setValue(value);
 		setDescription (description);
 		setType(type);
-		setPaiday(paiday);
+		//setPaiday(paiday);
 		setKey(key);
 	}
 	
@@ -65,12 +66,12 @@ public class FinanceDTO extends RepresentationModel<FinanceDTO> implements Seria
 	public void setType(FinanceType type) {
 		this.type = type;
 	}
-	public LocalDateTime getPaiday() {
+	/*public LocalDateTime getPaiday() {
 		return paiday;
 	}
 	public void setPaiday(LocalDateTime paiday) {
 		this.paiday = paiday;
-	}
+	}*/
 	public Long getKey() {
 		return key;
 	}
@@ -82,14 +83,10 @@ public class FinanceDTO extends RepresentationModel<FinanceDTO> implements Seria
 	public int hashCode() {
 		final int prime = 31;
 		int result = super.hashCode();
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		result = prime * result + ((value == null) ? 0 : value.hashCode());
-		result = prime * result + ((description == null) ? 0 : description.hashCode());
-		result = prime * result + ((type == null) ? 0 : type.hashCode());
-		result = prime * result + ((paiday == null) ? 0 : paiday.hashCode());
-		result = prime * result + ((key == null) ? 0 : key.hashCode());
+		result = prime * result + Objects.hash(description, key, name, type, value);
 		return result;
 	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -99,35 +96,12 @@ public class FinanceDTO extends RepresentationModel<FinanceDTO> implements Seria
 		if (getClass() != obj.getClass())
 			return false;
 		FinanceDTO other = (FinanceDTO) obj;
-		if (name == null) {
-			if (other.name != null)
-				return false;
-		} else if (!name.equals(other.name))
-			return false;
-		if (value == null) {
-			if (other.value != null)
-				return false;
-		} else if (!value.equals(other.value))
-			return false;
-		if (description == null) {
-			if (other.description != null)
-				return false;
-		} else if (!description.equals(other.description))
-			return false;
-		if (type != other.type)
-			return false;
-		if (paiday == null) {
-			if (other.paiday != null)
-				return false;
-		} else if (!paiday.equals(other.paiday))
-			return false;
-		if (key == null) {
-			if (other.key != null)
-				return false;
-		} else if (!key.equals(other.key))
-			return false;
-		return true;
+		return Objects.equals(description, other.description) && Objects.equals(key, other.key)
+				&& Objects.equals(name, other.name) && type == other.type && Objects.equals(value, other.value);
 	}
+
+
+	
 
 	
 }

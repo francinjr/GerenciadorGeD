@@ -15,12 +15,13 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import com.francinjr.xpenses.domain.exception.FinanceNotFoundException;
+import com.francinjr.xpenses.domain.exception.InvalidFieldException;
 
 @ControllerAdvice
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
 	@ExceptionHandler(FinanceNotFoundException.class)
-	private ResponseEntity<ExceptionResponse> ganhoNaoEncontradoHandler(FinanceNotFoundException exception) {
+	private ResponseEntity<ExceptionResponse> financeNotFoundHandler(FinanceNotFoundException exception) {
 		ExceptionResponse threatResponse = new ExceptionResponse(HttpStatus.NOT_FOUND.value(),
 				null, "Recurso não encontrado", exception.getMessage(), null);
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(threatResponse);
@@ -40,6 +41,13 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 				"Campos inválidos", "Há campos que não foram preenchidos corretamente", validationFields);
 
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exceptionResponse);
+	}
+	
+	@ExceptionHandler(InvalidFieldException.class)
+	private ResponseEntity<ExceptionResponse> invalidFieldHandler(InvalidFieldException exception) {
+		ExceptionResponse threatResponse = new ExceptionResponse(HttpStatus.BAD_REQUEST.value(),
+				null, "A finança é nula", exception.getMessage(), null);
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(threatResponse);
 	}
 
 	/*

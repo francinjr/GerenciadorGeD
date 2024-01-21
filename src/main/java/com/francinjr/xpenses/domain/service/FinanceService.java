@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.francinjr.xpenses.controller.FinanceController;
 import com.francinjr.xpenses.domain.exception.FinanceNotFoundException;
+import com.francinjr.xpenses.domain.exception.InvalidFieldException;
 import com.francinjr.xpenses.domain.model.Finance;
 import com.francinjr.xpenses.domain.repository.FinanceRepository;
 import com.francinjr.xpenses.dto.FinanceDTO;
@@ -43,6 +44,10 @@ public class FinanceService {
 
 	@Transactional
 	public FinanceDTO create(FinanceDTO finance) {
+		if(finance.getDescription().length() > 200) {
+			throw new InvalidFieldException();
+		}
+		
 		Finance entity = Mapper.parseObject(finance, Finance.class);
 
 		FinanceDTO dto = Mapper.parseObject(financeRepository.save(entity), FinanceDTO.class);
@@ -52,7 +57,10 @@ public class FinanceService {
 
 	@Transactional
 	public FinanceDTO update(FinanceDTO finance) {
-
+		if(finance.getDescription().length() > 200) {
+			throw new InvalidFieldException();
+		}
+		
 		Finance entity = financeRepository.findById(finance.getKey())
 				.orElseThrow(() -> new FinanceNotFoundException("Não foi possível atualizar, ", finance.getKey()));
 
