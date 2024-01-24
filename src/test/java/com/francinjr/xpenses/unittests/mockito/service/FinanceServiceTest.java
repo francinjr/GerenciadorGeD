@@ -61,7 +61,7 @@ class FinanceServiceTest {
 		assertNotNull(financeOne.getKey());
 		assertNotNull(financeOne.getLinks());
 
-		assertTrue(financeOne.toString().contains("links: [</api/finances/1>;rel=\"self\"]"));
+		assertTrue(financeOne.toString().contains("links: [</api/finances/v1/1>;rel=\"self\"]"));
 		
 		assertEquals("Name Test1", financeOne.getName());
 		assertEquals((Double) 25.75, financeOne.getValue());
@@ -75,7 +75,7 @@ class FinanceServiceTest {
 		assertNotNull(financeThree.getKey());
 		assertNotNull(financeThree.getLinks());
 		
-		assertTrue(financeThree.toString().contains("links: [</api/finances/3>;rel=\"self\"]"));
+		assertTrue(financeThree.toString().contains("links: [</api/finances/v1/3>;rel=\"self\"]"));
 		
 		assertEquals("Name Test3", financeThree.getName());
 		assertEquals((Double) 25.75, financeThree.getValue());
@@ -90,7 +90,7 @@ class FinanceServiceTest {
 		assertNotNull(financeNine.getKey());
 		assertNotNull(financeNine.getLinks());
 		
-		assertTrue(financeNine.toString().contains("links: [</api/finances/9>;rel=\"self\"]"));
+		assertTrue(financeNine.toString().contains("links: [</api/finances/v1/9>;rel=\"self\"]"));
 		
 		assertEquals("Name Test9", financeNine.getName());
 		assertEquals((Double) 25.75, financeNine.getValue());
@@ -110,7 +110,7 @@ class FinanceServiceTest {
 		assertNotNull(result.getKey());
 		assertNotNull(result.getLinks());
 		System.out.println(result.toString());
-		assertTrue(result.toString().contains("links: [</api/finances/21>;rel=\"self\"]"));
+		assertTrue(result.toString().contains("links: [</api/finances/v1/21>;rel=\"self\"]"));
 		assertEquals("Name Test21", result.getName());
 		assertEquals((Double) 25.75, result.getValue());
 		assertEquals("Description Test21", result.getDescription());
@@ -138,7 +138,7 @@ class FinanceServiceTest {
 		assertNotNull(result.getKey());
 		assertNotNull(result.getLinks());
 
-		assertTrue(result.toString().contains("links: [</api/finances/21>;rel=\"self\"]"));
+		assertTrue(result.toString().contains("links: [</api/finances/v1/21>;rel=\"self\"]"));
 		
 		assertEquals("Name Test21", result.getName());
 		assertEquals((Double) 25.75, result.getValue());
@@ -192,7 +192,7 @@ class FinanceServiceTest {
 		assertNotNull(result.getKey());
 		assertNotNull(result.getLinks());
 
-		assertTrue(result.toString().contains("links: [</api/finances/21>;rel=\"self\"]"));
+		assertTrue(result.toString().contains("links: [</api/finances/v1/21>;rel=\"self\"]"));
 		
 		assertEquals("Name Test21", result.getName());
 		assertEquals((Double) 25.75, result.getValue());
