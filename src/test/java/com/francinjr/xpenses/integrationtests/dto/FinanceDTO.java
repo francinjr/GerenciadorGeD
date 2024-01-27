@@ -1,45 +1,49 @@
-package com.francinjr.xpenses.domain.model;
+package com.francinjr.xpenses.integrationtests.dto;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-import com.francinjr.xpenses.dto.FinanceDTO;
+import com.francinjr.xpenses.domain.model.FinanceType;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
-@Entity
-@Table(name = "finances")
-public class Finance implements Serializable {
+public class FinanceDTO implements Serializable {
 	private static final long serialVersionUID = 1L;
 
+	private Long id;
+
+	@Size(min = 5, max = 30, message = "O nome deve ter entre 5 e 30 caracteres")
 	private String name;
+
+	@NotNull(message = "O valor não pode ser nulo")
 	private Double value;
+
 	private String description;
 	private FinanceType type;
-	//private LocalDateTime paiday;
+	// private LocalDateTime paiday;
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
-	
-	
-	public Finance(String name, Double value, String description, FinanceType type, LocalDateTime paiday,
-			Long id) {
+	public FinanceDTO(String name, Double value, String description, FinanceType type, LocalDateTime paiday, Long id) {
 		setName(name);
 		setValue(value);
 		setDescription(description);
 		setType(type);
-		//setPaiday(paiday);
+		// setPaiday(paiday);
 		setId(id);
 	}
-	
-	public Finance() {}
-	
+
+	public FinanceDTO() {
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
 	public String getName() {
 		return name;
 	}
@@ -71,22 +75,10 @@ public class Finance implements Serializable {
 	public void setType(FinanceType type) {
 		this.type = type;
 	}
-
-	/*public LocalDateTime getPaiday() {
-		return paiday;
-	}
-
-	public void setPaiday(LocalDateTime paiday) {
-		this.paiday = paiday;
-	}*/
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
+	/*
+	 * public LocalDateTime getPaiday() { return paiday; } public void
+	 * setPaiday(LocalDateTime paiday) { this.paiday = paiday; }
+	 */
 
 	@Override
 	public int hashCode() {
@@ -101,10 +93,11 @@ public class Finance implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Finance other = (Finance) obj;
+		FinanceDTO other = (FinanceDTO) obj;
 		return Objects.equals(description, other.description) && Objects.equals(id, other.id)
 				&& Objects.equals(name, other.name) && type == other.type && Objects.equals(value, other.value);
 	}
-
 	
+	
+
 }
