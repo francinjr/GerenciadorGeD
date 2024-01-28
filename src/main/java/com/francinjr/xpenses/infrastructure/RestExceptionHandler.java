@@ -16,6 +16,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 import com.francinjr.xpenses.domain.exception.FinanceNotFoundException;
 import com.francinjr.xpenses.domain.exception.InvalidFieldException;
+import com.francinjr.xpenses.domain.exception.InvalidJwtAuthenticationException;
 
 @ControllerAdvice
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
@@ -50,34 +51,14 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(threatResponse);
 	}
 
-	/*
-	 * protected ResponseEntity<Object>
-	 * handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders
-	 * headers, HttpStatusCode status, WebRequest request) {
-	 * 
-	 * List<RestErrorMessage> fieldErrors = new ArrayList<RestErrorMessage>();
-	 * 
-	 * for (ObjectError error : ex.getBindingResult().getAllErrors()) {
-	 * fieldErrors.add(new RestErrorMessage(HttpStatus.BAD_REQUEST.value(),
-	 * error.getDefaultMessage())); }
-	 * 
-	 * return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(fieldErrors); }
-	 */
-
-	/*
-	 * protected ResponseEntity<Object> handleMethodArgumentNotValid(
-	 * MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatusCode
-	 * status, WebRequest request) {
-	 * 
-	 * String message = ""; for(ObjectError error:
-	 * ex.getBindingResult().getAllErrors()) { message = message +
-	 * error.getDefaultMessage() + "\n"; } return handleExceptionInternal(ex,
-	 * message, headers, status, request); }
-	 */
-	/*
-	 * @ExceptionHandler(GanhoNaoEncontradoException.class) private
-	 * ResponseEntity<String> ganhoNaoEncontradoHandler(GanhoNaoEncontradoException
-	 * exception) { return
-	 * ResponseEntity.status(HttpStatus.NOT_FOUND).body("Ganho não encontrado"); }
-	 */
+	
+	@ExceptionHandler(InvalidJwtAuthenticationException.class)
+	public final ResponseEntity<ExceptionResponse> handleInvalidJwtAuthenticationExceptions(
+			Exception ex, WebRequest request) {
+		
+		ExceptionResponse exceptionResponse = new ExceptionResponse(HttpStatus.FORBIDDEN.value(),
+				null, "Falha ao autenticar", ex.getMessage(), null);
+		
+		return new ResponseEntity<>(exceptionResponse, HttpStatus.FORBIDDEN);
+	}
 }
