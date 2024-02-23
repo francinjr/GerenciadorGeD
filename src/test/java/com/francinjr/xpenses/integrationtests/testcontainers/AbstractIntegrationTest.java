@@ -15,7 +15,7 @@ import org.testcontainers.lifecycle.Startables;
 public class AbstractIntegrationTest {
 
 	static class Initializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {
-		static PostgreSQLContainer<?> postgreSQLContainer = new PostgreSQLContainer<>("postgres:16.0");
+		static PostgreSQLContainer<?> postgreSQLContainer = new PostgreSQLContainer<>("postgres:15.6");
 		
 		public static void startContainers() {
 			Startables.deepStart(Stream.of(postgreSQLContainer)).join();

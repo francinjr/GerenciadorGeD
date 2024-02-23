@@ -2,7 +2,7 @@ package com.francinjr.xpenses.dto.security;
 
 import java.io.Serializable;
 
-public class AccountCredentialsDTO implements Serializable {
+public class AccountCredentialsDTO implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 	

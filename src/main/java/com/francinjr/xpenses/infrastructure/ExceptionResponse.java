@@ -1,8 +1,11 @@
 package com.francinjr.xpenses.infrastructure;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class ExceptionResponse {
+public class ExceptionResponse implements Serializable {
+	private static final long serialVersionUID = 1L;
+	
 	private Integer status;
 	private String type;
 	private String title;

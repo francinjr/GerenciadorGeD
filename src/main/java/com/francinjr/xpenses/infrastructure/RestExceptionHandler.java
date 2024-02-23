@@ -11,6 +11,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
@@ -19,8 +20,23 @@ import com.francinjr.xpenses.domain.exception.InvalidFieldException;
 import com.francinjr.xpenses.domain.exception.InvalidJwtAuthenticationException;
 
 @ControllerAdvice
+@RestController
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
+	@ExceptionHandler(Exception.class)
+	public final ResponseEntity<ExceptionResponse> handleAllExceptions(
+			Exception ex, WebRequest request) {
+		
+		ExceptionResponse exceptionResponse = new ExceptionResponse(
+				HttpStatus.INTERNAL_SERVER_ERROR.value(),
+				null,
+				"Erro",
+				ex.getMessage(),
+				null);
+		
+		return new ResponseEntity<>(exceptionResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+	
 	@ExceptionHandler(FinanceNotFoundException.class)
 	private ResponseEntity<ExceptionResponse> financeNotFoundHandler(FinanceNotFoundException exception) {
 		ExceptionResponse threatResponse = new ExceptionResponse(HttpStatus.NOT_FOUND.value(),
@@ -56,8 +72,12 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 	public final ResponseEntity<ExceptionResponse> handleInvalidJwtAuthenticationExceptions(
 			Exception ex, WebRequest request) {
 		
-		ExceptionResponse exceptionResponse = new ExceptionResponse(HttpStatus.FORBIDDEN.value(),
-				null, "Falha ao autenticar", ex.getMessage(), null);
+		ExceptionResponse exceptionResponse = new ExceptionResponse(
+				HttpStatus.FORBIDDEN.value(),
+				null,
+				"Falha ao autenticar",
+				ex.getMessage(),
+				null);
 		
 		return new ResponseEntity<>(exceptionResponse, HttpStatus.FORBIDDEN);
 	}
