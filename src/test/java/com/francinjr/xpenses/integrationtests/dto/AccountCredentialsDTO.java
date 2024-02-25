@@ -2,6 +2,9 @@ package com.francinjr.xpenses.integrationtests.dto;
 
 import java.io.Serializable;
 
+import jakarta.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement
 public class AccountCredentialsDTO implements Serializable{
 
 	private static final long serialVersionUID = 1L;
@@ -13,6 +16,8 @@ public class AccountCredentialsDTO implements Serializable{
 		this.username = username;
 		this.password = password;
 	}
+	
+	public AccountCredentialsDTO() {}
 
 	public String getUsername() {
 		return username;

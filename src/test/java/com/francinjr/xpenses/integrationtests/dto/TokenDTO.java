@@ -3,6 +3,9 @@ package com.francinjr.xpenses.integrationtests.dto;
 import java.io.Serializable;
 import java.util.Date;
 
+import jakarta.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement
 public class TokenDTO implements Serializable{
 
 	private static final long serialVersionUID = 1L;

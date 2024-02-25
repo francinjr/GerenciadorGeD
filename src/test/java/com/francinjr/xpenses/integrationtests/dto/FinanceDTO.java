@@ -8,7 +8,9 @@ import com.francinjr.xpenses.domain.model.FinanceType;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import jakarta.xml.bind.annotation.XmlRootElement;
 
+@XmlRootElement
 public class FinanceDTO implements Serializable {
 	private static final long serialVersionUID = 1L;
 
