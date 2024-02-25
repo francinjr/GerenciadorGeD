@@ -1,12 +1,9 @@
-package com.francinjr.xpenses.integrationtests.controller.withjson;
+package com.francinjr.xpenses.integrationtests.controller.cors.withjson;
 
-
-import static io.restassured.RestAssured.given;
+import static io.restassured.RestAssured.given;	
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import java.util.List;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
@@ -16,7 +13,6 @@ import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -35,7 +31,7 @@ import io.restassured.specification.RequestSpecification;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @TestMethodOrder(OrderAnnotation.class)
-public class FinanceControllerJsonTest extends AbstractIntegrationTest {
+public class FinanceControllerCorsJsonTest extends AbstractIntegrationTest {
 	
 	private static RequestSpecification specification;
 	private static ObjectMapper objectMapper;
@@ -87,6 +83,7 @@ public class FinanceControllerJsonTest extends AbstractIntegrationTest {
 		var content = 
 		given().spec(specification)
 		.contentType(TestConfigs.CONTENT_TYPE_JSON)
+		.header(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.ORIGIN_XPENSES)
 			.body(finance)
 			.when()
 			.post()
@@ -107,48 +104,36 @@ public class FinanceControllerJsonTest extends AbstractIntegrationTest {
 		
 		assertTrue(persistedFinance.getId() > 0);
 		
-		assertEquals("Pastel", persistedFinance.getName());
-		assertEquals("Pastel comprado no lanche", persistedFinance.getDescription());
-		assertEquals(5.75, persistedFinance.getValue());
+		assertEquals("Coxinha", persistedFinance.getName());
+		assertEquals("Coxinha que comprei no lanche da tarde", persistedFinance.getDescription());
+		assertEquals(4.50, persistedFinance.getValue());
 		assertEquals(FinanceType.EXPENSE, persistedFinance.getType());
 	}
-	
+
+
 	
 	@Test
 	@Order(2)
-	void testUpdate() throws JsonMappingException, JsonProcessingException {
-		finance.setDescription("Pastel de Frango comprado no lanche");
+	void testCreateWithWrongOrigin() throws JsonMappingException, JsonProcessingException {
+		mockFinance();
+		
 		var content = 
 		given().spec(specification)
 		.contentType(TestConfigs.CONTENT_TYPE_JSON)
-			.body(finance)
-			.when()
-			.put()
-			.then()
-				.statusCode(200)
-			.extract()
+		.header(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.ORIGIN_YTEST)
+				.body(finance)
+				.when()
+				.post()
+				.then()
+				.statusCode(403)
+				.extract()
 				.body()
-					.asString();
+				.asString();
 		
-		FinanceDTO persistedFinance = objectMapper.readValue(content, FinanceDTO.class);
-		finance = persistedFinance;
 		
-		assertNotNull(persistedFinance);
-		assertNotNull(persistedFinance.getName());
-		assertNotNull(persistedFinance.getDescription());
-		assertNotNull(persistedFinance.getValue());
-		assertNotNull(persistedFinance.getType());
-		
-		assertEquals(finance.getId(), persistedFinance.getId());
-		
-		assertEquals("Pastel", persistedFinance.getName());
-		assertEquals("Pastel de Frango comprado no lanche", persistedFinance.getDescription());
-		assertEquals(5.75, persistedFinance.getValue());
-		assertEquals(FinanceType.EXPENSE, persistedFinance.getType());
+		assertNotNull(content);
+		assertEquals("Invalid CORS request", content);
 	}
-
-
-	
 	
 	@Test
 	@Order(3)
@@ -177,106 +162,42 @@ public class FinanceControllerJsonTest extends AbstractIntegrationTest {
 		assertNotNull(persistedFinance.getValue());
 		assertNotNull(persistedFinance.getType());
 		
-		assertEquals(finance.getId(), persistedFinance.getId());
+		assertTrue(persistedFinance.getId() > 0);
 		
-		assertEquals("Pastel", persistedFinance.getName());
-		assertEquals("Pastel de Frango comprado no lanche", persistedFinance.getDescription());
-		assertEquals(5.75, persistedFinance.getValue());
+		assertEquals("Coxinha", persistedFinance.getName());
+		assertEquals("Coxinha que comprei no lanche da tarde", persistedFinance.getDescription());
+		assertEquals(4.50, persistedFinance.getValue());
 		assertEquals(FinanceType.EXPENSE, persistedFinance.getType());
 	}
 	
 	
 	@Test
 	@Order(4)
-	void testDelete() throws JsonMappingException, JsonProcessingException {
-		
-		given().spec(specification)
-			.contentType(TestConfigs.CONTENT_TYPE_JSON)
-			.pathParam("id", finance.getId())
-			.when()
-			.delete("{id}")
-			.then()
-				.statusCode(204);
-	}
-	
-	
-	@Test
-	@Order(5)
-	void testFindAll() throws JsonMappingException, JsonProcessingException {
+	void testFindByIdWithWrongOrigin() throws JsonMappingException, JsonProcessingException {
+		mockFinance();
 		
 		var content = 
 		given().spec(specification)
 		.contentType(TestConfigs.CONTENT_TYPE_JSON)
+		.header(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.ORIGIN_YTEST)
+			.pathParam("id", finance.getId())
 			.when()
-			.get()
+			.get("{id}")
 			.then()
-				.statusCode(200)
+				.statusCode(403)
 			.extract()
 				.body()
-				.asString();
+					.asString();
 		
-		List<FinanceDTO> finances = objectMapper.readValue(content, new TypeReference<List<FinanceDTO>>() {});
-		
-		FinanceDTO foundFinanceOne = finances.get(0);
-		finance = foundFinanceOne;
-		
-		assertNotNull(foundFinanceOne.getName());
-		assertNotNull(foundFinanceOne.getDescription());
-		assertNotNull(foundFinanceOne.getValue());
-		//assertNotNull(foundFinanceOne.getType());
-		
-		assertEquals(1, foundFinanceOne.getId());
-		
-		assertEquals("Cafézinho sinistro", foundFinanceOne.getName());
-		assertEquals("Cafézinho da tarde", foundFinanceOne.getDescription());
-		assertEquals(2.50, foundFinanceOne.getValue());
-		//assertEquals(FinanceType.EXPENSE, foundFinanceOne.getType());
-		
-		
-		
-		FinanceDTO foundFinanceTwo = finances.get(1);
-		finance = foundFinanceTwo;
-		
-		assertNotNull(foundFinanceTwo.getName());
-		assertNotNull(foundFinanceTwo.getDescription());
-		assertNotNull(foundFinanceTwo.getValue());
-		//assertNotNull(foundFinanceTwo.getType());
-		
-		assertEquals(2, foundFinanceTwo.getId());
-		
-		assertEquals("Lanche bom", foundFinanceTwo.getName());
-		assertEquals("Lancinho da tarde", foundFinanceTwo.getDescription());
-		assertEquals(3.75, foundFinanceTwo.getValue());
-		//assertEquals(FinanceType.EXPENSE, foundFinanceOne.getType());
-	}
-	
-	
-	@Test
-	@Order(6)
-	void testFindAllWithoutToken() throws JsonMappingException, JsonProcessingException {
-		
-		RequestSpecification specificationWithoutToken = new RequestSpecBuilder()
-		.setBasePath("/api/finances/v1")
-		.setPort(TestConfigs.SERVER_PORT)
-			.addFilter(new RequestLoggingFilter(LogDetail.ALL))
-			.addFilter(new ResponseLoggingFilter(LogDetail.ALL))
-		.build();
-		
-		
-		given().spec(specificationWithoutToken)
-		.contentType(TestConfigs.CONTENT_TYPE_JSON)
-			.when()
-			.get()
-			.then()
-				.statusCode(403);
+		assertNotNull(content);
+		assertEquals("Invalid CORS request", content);
 	}
 	
 	
 	private void mockFinance() {
-		finance.setName("Pastel");
-		finance.setDescription("Pastel comprado no lanche");
-		finance.setValue(5.75);
+		finance.setName("Coxinha");
+		finance.setDescription("Coxinha que comprei no lanche da tarde");
+		finance.setValue(4.50);
 		finance.setType(FinanceType.EXPENSE);
 	}
 }
-
