@@ -52,4 +52,21 @@ public class FileStorageService {
 				"Could not store file " + filename + ". Please try again!", e);
 		}
 	}
+	
+	
+	public Resource loadFileAsResource(String filename) {
+		
+		try {
+			Path filePath = this.fileStorageLocation.resolve(filename).normalize();
+			Resource resource = new UrlResource(filePath.toUri());
+			
+			if(resource.exists()) {
+				return resource;
+			} else {
+				throw new MyFileNotFoundException("File not found");
+			}
+		} catch(Exception e) {
+			throw new MyFileNotFoundException("File not found" + filename, e);
+		}
+	}
 }
