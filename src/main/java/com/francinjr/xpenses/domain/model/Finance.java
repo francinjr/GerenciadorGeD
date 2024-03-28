@@ -1,7 +1,7 @@
 package com.francinjr.xpenses.domain.model;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.Objects;
 
 import jakarta.persistence.Entity;
@@ -19,20 +19,22 @@ public class Finance implements Serializable {
 	private Double value;
 	private String description;
 	private FinanceType type;
-	//private LocalDateTime paiday;
+	private LocalDate startDate;
+	private LocalDate endDate;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
 	
-	public Finance(String name, Double value, String description, FinanceType type, LocalDateTime paiday,
-			Long id) {
+	public Finance(String name, Double value, String description, FinanceType type, 
+			LocalDate startDate, LocalDate endDate,Long id) {
 		setName(name);
 		setValue(value);
 		setDescription(description);
 		setType(type);
-		//setPaiday(paiday);
+		setStartDate(startDate);
+		setEndDate(endDate);
 		setId(id);
 	}
 	
@@ -70,13 +72,23 @@ public class Finance implements Serializable {
 		this.type = type;
 	}
 
-	/*public LocalDateTime getPaiday() {
-		return paiday;
+	
+
+	public LocalDate getStartDate() {
+		return startDate;
 	}
 
-	public void setPaiday(LocalDateTime paiday) {
-		this.paiday = paiday;
-	}*/
+	public void setStartDate(LocalDate startDate) {
+		this.startDate = startDate;
+	}
+
+	public LocalDate getEndDate() {
+		return endDate;
+	}
+
+	public void setEndDate(LocalDate endDate) {
+		this.endDate = endDate;
+	}
 
 	public Long getId() {
 		return id;

@@ -1,6 +1,7 @@
 package com.francinjr.xpenses.dto;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
@@ -28,15 +29,19 @@ public class FinanceDTO extends RepresentationModel<FinanceDTO> implements Seria
 	
 	private String description;
 	private FinanceType type;
-	//private LocalDateTime paiday;
+	
+	private LocalDate startDate;
+	private LocalDate endDate;
 	
 
-	public FinanceDTO(String name, Double value, String description, FinanceType type, LocalDateTime paiday, Long key) {
+	public FinanceDTO(String name, Double value, String description, FinanceType type, 
+			LocalDate startDate, LocalDate endDate, Long key) {
 		setName(name);
 		setValue(value);
 		setDescription (description);
 		setType(type);
-		//setPaiday(paiday);
+		setStartDate(startDate);
+		setEndDate(endDate);
 		setKey(key);
 	}
 	
@@ -66,12 +71,24 @@ public class FinanceDTO extends RepresentationModel<FinanceDTO> implements Seria
 	public void setType(FinanceType type) {
 		this.type = type;
 	}
-	/*public LocalDateTime getPaiday() {
-		return paiday;
+
+	public LocalDate getStartDate() {
+		return startDate;
 	}
-	public void setPaiday(LocalDateTime paiday) {
-		this.paiday = paiday;
-	}*/
+
+	public void setStartDate(LocalDate startDate) {
+		this.startDate = startDate;
+	}
+
+	public LocalDate getEndDate() {
+		return endDate;
+	}
+
+	public void setEndDate(LocalDate endDate) {
+		this.endDate = endDate;
+	}
+	
+	
 	public Long getKey() {
 		return key;
 	}

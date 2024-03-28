@@ -1,0 +1,39 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/gerenciadorged
+    username: postgres
+    password: 123
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: none
+  servlet:
+    multipart:
+      enabled: true
+      file-size-threshold: 2KB
+      max-file-size: 200MB
+      max-request-size: 215MB
+
+server:
+  port: 8081
+
+springdoc:
+  pathsToMatch: /api/**/v1/**,/auth/**
+  swagger-ui:
+    use-root-path: true
+
+cors:
+  originPatterns:
+    - http://localhost:5173
+    - http://localhost:3000
+    - http://127.0.0.1:5173
+    - http://localhost:8080
+
+file:
+  upload-dir: C:/FilesGerenciadorGGED
+
+security:
+  jwt:
+    token:
+      secret-key: 53cr37
+      expire-length: 3600000
