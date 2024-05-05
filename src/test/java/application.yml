@@ -1,6 +1,5 @@
 server:
   port: 8888
-
 spring:
   jpa:
     hibernate:
@@ -17,17 +16,14 @@ spring:
       file-size-threshold: 2KB
       max-file-size: 200MB
       max-request-size: 215MB
-
 cors:
   originPatterns:
     - http://localhost:5173
     - http://localhost:3000
     - http://127.0.0.1:5173
     - http://localhost:8080
-
 file:
   upload-dir: C:/FilesGerenciadorGGED
-
 security:
   jwt:
     token:

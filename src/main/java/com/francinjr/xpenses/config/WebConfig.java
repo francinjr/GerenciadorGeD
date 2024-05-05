@@ -45,18 +45,4 @@ public class WebConfig implements WebMvcConfigurer {
 				.mediaType("xml", MediaType.APPLICATION_XML)
 				.mediaType("x-yaml", MEDIA_TYPE_APPLICATION_YML);
 	}
-	
-	
-	/*@Bean
-	WebMvcConfigurer corsConfigurer() {
-		return new WebMvcConfigurer() {
-			@Override
-			public void addCorsMappings(CorsRegistry registry) {
-				registry.addMapping("/**").allowedOrigins("http://localhost:5173",
-						"http://localhost:3000", "http://127.0.0.1:5173",
-						"http://localhost:8080")
-						.allowedMethods("*");
-			}
-		};
-	}*/
 }
