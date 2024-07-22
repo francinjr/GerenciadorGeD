@@ -1,9 +1,13 @@
 package com.francinjr.xpenses.domain.service;
 
+import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
@@ -37,6 +41,8 @@ public class FileStorageService {
 	}
 	
 	public String storeFile(MultipartFile file) {
+		// Parei aqui. O que devo fazer é a lógica para ler o arquivo e transformar o texto
+		// em uma finança
 		String filename = StringUtils.cleanPath(file.getOriginalFilename());
 		try {
 			// Filename..txt
@@ -67,6 +73,40 @@ public class FileStorageService {
 			}
 		} catch(Exception e) {
 			throw new MyFileNotFoundException("File not found" + filename, e);
+		}
+	}
+	
+	
+	public List<String> findAllFiles() throws Exception {
+		File folder = new File(this.fileStorageLocation.toString());
+		
+		List<File> files = findAllFilesInFolder(folder);
+
+		List<String> filesPresentations = new ArrayList<>();
+		for (File file : files) {
+			filesPresentations.add(file.getName());
+		}
+		
+		return filesPresentations;
+	}
+	
+	
+	public List<File> findAllFilesInFolder(File folder) throws Exception {
+		if (folder.isDirectory()) {
+			File[] files = folder.listFiles();
+
+			if (files != null) {
+				List<File> foundedFiles = new LinkedList<>();
+
+				for (File file : files) {
+					foundedFiles.add(file);
+				}
+				return foundedFiles;
+			} else {
+				throw new Exception("The directory is empty.");
+			}
+		} else {
+			throw new Exception("The specified path is not a valid directory.");
 		}
 	}
 }

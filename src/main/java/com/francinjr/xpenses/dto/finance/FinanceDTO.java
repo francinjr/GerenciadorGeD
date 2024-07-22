@@ -1,17 +1,16 @@
-package com.francinjr.xpenses.dto;
+package com.francinjr.xpenses.dto.finance;
 
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Objects;
 
 import org.springframework.hateoas.RepresentationModel;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.francinjr.xpenses.domain.model.FinanceType;
 
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 
 @JsonPropertyOrder({"id", "name", "value", "description", "type", "paiday" })
@@ -24,17 +23,20 @@ public class FinanceDTO extends RepresentationModel<FinanceDTO> implements Seria
 	@Size(min = 5, max = 30, message = "O nome deve ter entre 5 e 30 caracteres")
 	private String name;
 
-	@NotNull(message = "O valor não pode ser nulo")
+	@Positive(message = "O valor da finança tem que ser maior que R$ 0,00")
 	private Double value;
 	
 	private String description;
-	private FinanceType type;
+	//private FinanceType type;
+	
+	@NotBlank(message = "Um tipo de finança precisa ser selecionado")
+	private String type;
 	
 	private LocalDate startDate;
 	private LocalDate endDate;
 	
 
-	public FinanceDTO(String name, Double value, String description, FinanceType type, 
+	public FinanceDTO(String name, Double value, String description, String type,
 			LocalDate startDate, LocalDate endDate, Long key) {
 		setName(name);
 		setValue(value);
@@ -65,10 +67,10 @@ public class FinanceDTO extends RepresentationModel<FinanceDTO> implements Seria
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	public FinanceType getType() {
+	public String getType() {
 		return type;
 	}
-	public void setType(FinanceType type) {
+	public void setType(String type) {
 		this.type = type;
 	}
 

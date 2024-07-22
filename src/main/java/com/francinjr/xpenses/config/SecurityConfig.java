@@ -58,7 +58,7 @@ public class SecurityConfig {
         return http
             .httpBasic(basic -> basic.disable())
             .csrf(csrf -> csrf.disable())
-            .addFilterBefore(customFilter, UsernamePasswordAuthenticationFilter.class)
+           /* .addFilterBefore(customFilter, UsernamePasswordAuthenticationFilter.class)
                 .sessionManagement(
             		session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(
@@ -73,7 +73,7 @@ public class SecurityConfig {
                 		).permitAll()
                         .requestMatchers("/api/**").authenticated()
                         .requestMatchers("/users").denyAll()
-                )
+                )*/
             .cors(cors -> {})
                 .build();
         //@formatter:on

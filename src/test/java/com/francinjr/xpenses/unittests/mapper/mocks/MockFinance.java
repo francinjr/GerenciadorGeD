@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.francinjr.xpenses.domain.model.Finance;
 import com.francinjr.xpenses.domain.model.FinanceType;
-import com.francinjr.xpenses.dto.FinanceDTO;
+import com.francinjr.xpenses.dto.finance.FinanceDTO;
 
 public class MockFinance {
 
@@ -50,7 +50,7 @@ public class MockFinance {
 		finance.setName("Name Test" + number);
 		finance.setValue((Double) 25.75);
 		finance.setDescription("Description Test" + number);
-		finance.setType(FinanceType.EARNING);
+		//finance.setType(FinanceType.EARNING);
 		//finance.setPaiday(LocalDateTime.now());
 		finance.setKey(number.longValue());
         return finance;

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.francinjr.xpenses.domain.model.Finance;
-import com.francinjr.xpenses.dto.FinanceDTO;
+import com.francinjr.xpenses.dto.finance.FinanceDTO;
 
 import org.modelmapper.ModelMapper;
 
